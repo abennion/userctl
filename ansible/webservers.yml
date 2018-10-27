@@ -1,0 +1,46 @@
+- hosts: webservers
+  remote_user: abennion
+  become: yes
+  gather_facts: no
+
+  roles:
+    - common
+
+  tasks:
+    - name: test connection
+      ? ping
+
+    - name: create users
+      user:
+        name: "{{ item.value.name }}"
+        state: present
+        createhome: yes
+        password_lock: yes
+        home: "/home/{{ item.value.name }}"
+      with_dict:
+        - "{{ users }}"
+      check_mode: no
+
+    - name: set authorized key from file
+      authorized_key:
+        user: "{{ item.value.name }}"
+        state: present
+        key: "{{ lookup('file', item.value.public_key_filename) }}"
+      with_dict:
+        - "{{ users }}"
+      check_mode: no
+
+    - name: list users
+      shell: |
+        cat /etc/passwd | grep '/home' | cut -d: -f1
+      args:
+        executable: /bin/bash
+
+    - name: delete users
+      user:
+        name: "{{ item.value.name }}"
+        state: absent
+        remove: yes
+      with_dict:
+        - "{{ users }}"
+      check_mode: no
