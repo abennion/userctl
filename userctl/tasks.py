@@ -28,7 +28,7 @@ def get_fabric_runner(ctx, host):
     return create_runner('fabric', **kwargs)
 
 
-def get_users(ctx, host, runner):
+def get_user_manager(ctx, host, runner):
     # TODO determine the host's platform and distribution
     kwargs = {
         'platform': 'Linux',
@@ -47,7 +47,7 @@ def add_user(ctx, host, user, public_key_filename):
     with open(public_key_filename, 'r') as f:
         public_key = f.read().strip()
     runner = get_fabric_runner(ctx, host)
-    users = get_users(ctx, host, runner)
+    users = get_user_manager(ctx, host, runner)
     print(users.create_user(user, public_key))
 
 
@@ -57,7 +57,7 @@ def list_users(ctx, host):
     Lists users on the specified host.
     """
     runner = get_fabric_runner(ctx, host)
-    users = get_users(ctx, host, runner)
+    users = get_user_manager(ctx, host, runner)
     print(users.list_users())
 
 
@@ -67,5 +67,5 @@ def delete_user(ctx, host, user):
     Deletes a user on the specified host.
     """
     runner = get_fabric_runner(ctx, host)
-    users = get_users(ctx, host, runner)
+    users = get_user_manager(ctx, host, runner)
     print(users.delete_user(user))

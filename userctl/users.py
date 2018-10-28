@@ -51,6 +51,7 @@ class Users(object):
         return self.runner.run_command(cmd)
 
     def create_user(self, name, public_key):
+        # TODO: study the ansible user module
         self.create_user_useradd(name)
         self.run_command("usermod --lock {}".format(name))
         if not self.dir_exists("/home/{}/.ssh".format(name)):
