@@ -1,73 +1,71 @@
-# pylint: disable=C0103,W0613
+# pylint: disable=C0103,W0613,C0111
 """
 Tasks for managing users implemented with Invoke.
 """
 from __future__ import print_function
 from invoke import task
 from .runners import create_instance as create_runner
-from .users import create_instance as create_user
+from .users import create_instance as create_users
 
-# TODO: improve passing of core arguments
 # TODO: refactor methods for easier testing
-# TODO: detect the remote distribution
-# TODO: create factory for distribution specific methods
-# TODO: create tests with mocks
 # TODO: improve output and logging
 # TODO: task for creating a sample config file
 # TODO: complete documentation and readmes
 
 
-@task
-def add_user(ctx, host, admin_user, admin_key_filename, user, public_key_filename):
-    """
-    Creates and configures a new user.
-    """
+def get_fabric_runner(ctx, host):
+    # TODO: this could be better since we're using fabric.config already
     kwargs = {
         'host': host,
-        'admin_user': admin_user,
-        'admin_key_filename': admin_key_filename,
+        'user': ctx.user,
+        'port': ctx.port,
+        'config': ctx.config,
+        'gateway': ctx.gateway,
+        'forward_agent': ctx.forward_agent,
+        'connect_timeout': ctx.timeouts,
+        'connect_kwargs': ctx.connect_kwargs,
     }
-    runner = create_runner('fabric', **kwargs)
+    return create_runner('fabric', **kwargs)
+
+
+def get_users(ctx, host, runner):
+    # TODO determine the host's platform and distribution
     kwargs = {
         'platform': 'Linux',
         'distribution': 'Ubuntu',
         'runner': runner,
     }
-    user = create_user(**kwargs)
-    user.create_user(user)
+    return create_users(**kwargs)
 
 
 @task
-def list_users(ctx, host, admin_user, admin_key_filename):
+def add_user(ctx, host, user, public_key_filename):
     """
-    Prints a list of users.
+    Creates a new user on the specified host.
     """
-    kwargs = {
-        'host': host,
-        'admin_user': admin_user,
-        'admin_key_filename': admin_key_filename,
-    }
-    runner = create_runner('fabric', **kwargs)
-    kwargs = {
-        'platform': 'Linux',
-        'distribution': 'Ubuntu',
-        'runner': runner,
-    }
-    user = create_user(**kwargs)
-    print(user.list_users())
+    public_key = None
+    with open(public_key_filename, 'r') as f:
+        public_key = f.read().strip()
+    runner = get_fabric_runner(ctx, host)
+    users = get_users(ctx, host, runner)
+    print(users.create_user(user, public_key))
 
 
 @task
-def delete_user(ctx, host, admin_user, admin_key_filename, user):
+def list_users(ctx, host):
     """
-    Deletes a user and the user's home directory.
+    Lists users on the specified host.
     """
-    # kwargs = {
-    #     'platform': 'Linux',
-    #     'distribution': 'Ubuntu',
-    #     'host': host,
-    #     'admin_user': admin_user,
-    #     'admin_key_filename': admin_key_filename
-    # }
-    # user = create_user(**kwargs)
-    # user.delete_user(user)
+    runner = get_fabric_runner(ctx, host)
+    users = get_users(ctx, host, runner)
+    print(users.list_users())
+
+
+@task
+def delete_user(ctx, host, user):
+    """
+    Deletes a user on the specified host.
+    """
+    runner = get_fabric_runner(ctx, host)
+    users = get_users(ctx, host, runner)
+    print(users.delete_user(user))

@@ -1,5 +1,7 @@
+# pylint: disable=C0103,C0111
 # from invoke import Argument, Collection, Program
 from invoke import Collection, Program
+from fabric.config import Config
 from . import tasks
 from . import __version__ as version
 
@@ -13,5 +15,6 @@ class UserCtl(Program):
 program = UserCtl(
     name="userctl",
     version=version,
-    namespace=Collection.from_module(tasks)
+    namespace=Collection.from_module(tasks),
+    config_class=Config
 )
