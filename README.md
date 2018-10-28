@@ -7,7 +7,7 @@ The [Fabric](https://github.com/fabric/fabric) and
 manage users. Fabric and Ansible both utilize the
 [Paramiko](https://github.com/paramiko/paramiko) SSH library.
 
-## Limitation of Scope
+## Limitations
 
 The scope of the solution is limited to the minimum necessary to fulfill the
 assignment.
@@ -15,7 +15,7 @@ assignment.
 ## Installation
 
 ```bash
-pip install -e git+https://github.com/fabric/fabric
+pip install -e git+https://github.com/abennion/userctl#egg=userctl
 userctl --help
 ```
 
@@ -29,6 +29,8 @@ make clean
 ```
 
 ## Usage
+
+TODO: ssh configuration
 
 ```bash
 
