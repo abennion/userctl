@@ -1,5 +1,7 @@
 # pylint: disable=C0103,C0111
-# from invoke import Argument, Collection, Program
+"""
+Main entrypoint for the Invoke CLI.
+"""
 from invoke import Collection, Program
 from fabric.config import Config
 from . import tasks

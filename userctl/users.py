@@ -1,4 +1,7 @@
 # pylint: disable=W0613,C0111
+"""
+User managers implemented for different host environments.
+"""
 
 
 def create_instance(*args, name='generic', **kwargs):
