@@ -15,7 +15,7 @@ To run the playbook, you may need to:
 
 Variables can be passed into Ansible in a variety of ways, but two default
 user accounts are defined under
-[ansible/roles/common/defaults/main.yaml](ansible/roles/common/defaults/main.yaml):
+[roles/common/defaults/main.yaml](roles/common/defaults/main.yaml):
 
 ```yaml
 users:
