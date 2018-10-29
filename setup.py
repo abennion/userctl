@@ -1,7 +1,4 @@
-# pylint: disable=W0122,C0103
-"""
-Set script for installing the module.
-"""
+# pylint: disable=W0122,C0103,C0111
 import os
 import setuptools
 
