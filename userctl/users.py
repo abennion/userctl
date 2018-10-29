@@ -23,8 +23,6 @@ def create_instance(*args, **kwargs):
 class Users(object):
     """
     User manager for a generic Linux host.
-
-    Ansible user module: https://github.com/ansible/ansible-modules-core/blob/devel/system/user.py.
     """
 
     PASSWD_USERNAME = 0
@@ -77,7 +75,14 @@ class Users(object):
         return self.runner.run_command(cmd)
 
     def create_user(self, name, public_key):
-        # TODO: study the ansible user module
+        """
+        Creates a new user and adds an authorized key.
+
+        The following commands are run on the host via Fabric and SSH, unlike
+        Ansible, which executes Python on the host.
+
+        https://github.com/ansible/ansible-modules-core/blob/devel/system/user.py
+        """
         self.create_user_useradd(name)
         self.run_command("usermod --lock {}".format(name))
         if not self.dir_exists("/home/{}/.ssh".format(name)):
