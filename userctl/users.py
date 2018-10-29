@@ -2,22 +2,7 @@
 """
 User managers implemented for different host environments.
 """
-
-
-def create_instance(*args, **kwargs):
-    """
-    Factory method that returns an instance derived from Users.
-    """
-    platform = kwargs.get('platform', None)
-    distribution = kwargs.get('distribution', None)
-    name = "{}-{}".format(platform, distribution)
-    classes = {
-        'linux-generic': Users
-    }
-    users_class = classes.get(name.lower(), Users)
-    if users_class:
-        return users_class(*args, **kwargs)
-    raise NotImplementedError()
+from .utils import load_platform_subclass
 
 
 class Users(object):
@@ -33,7 +18,12 @@ class Users(object):
     PASSWD_HOME = 5
     PASSWD_SHELL = 6
 
+    platform = 'Linux'
+    distribution = None
     runner = None
+
+    def __new__(cls, *args, **kwargs):
+        return load_platform_subclass(Users, *args, **kwargs)
 
     def __init__(self, *args, **kwargs):
         self.post_initialize(*args, **kwargs)
@@ -55,7 +45,6 @@ class Users(object):
         return self.run_command(cmd)
 
     def list_users_passwd(self):
-        # cmd = "cat /etc/passwd | grep '/home' | cut -d: -f1"
         cmd = "getent passwd"
         text = self.runner.run_command(cmd)
         users = {}
@@ -70,8 +59,9 @@ class Users(object):
                 }
         return users
 
-    def delete_user_deluser(self, name):
-        cmd = "deluser --remove-home {}".format(name)
+    def delete_user_userdel(self, name):
+        # cmd = "deluser --remove-home {}".format(name)
+        cmd = "userdel -r {}".format(name)
         return self.runner.run_command(cmd)
 
     def create_user(self, name, public_key):
@@ -111,4 +101,22 @@ class Users(object):
         return res.strip()
 
     def delete_user(self, name):
-        self.delete_user_deluser(name)
+        self.delete_user_userdel(name)
+
+
+class CentOsUsers(Users):
+    """
+    Demonstrates a platform specific subclass.
+    """
+
+    platform = 'Linux'
+    distribution = "Centos linux"
+
+    def list_users(self):
+        users = self.list_users_passwd()
+        # res = "{}, {}\n".format(self.platform, self.distribution).lower()
+        res = "using the centos users class\n"
+        for username, details in users.items():
+            res += "username: {}, uid: {}, comment: {}\n".format(
+                username, details['uid'], details['comment'])
+        return res.strip()
