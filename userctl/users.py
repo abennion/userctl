@@ -14,9 +14,9 @@ def create_instance(*args, **kwargs):
     classes = {
         'linux-generic': Users
     }
-    runner_class = classes.get(name.lower(), Users)
-    if runner_class:
-        return runner_class(*args, **kwargs)
+    users_class = classes.get(name.lower(), Users)
+    if users_class:
+        return users_class(*args, **kwargs)
     raise NotImplementedError()
 
 
