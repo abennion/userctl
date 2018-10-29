@@ -1,7 +1,7 @@
 users:
   johndoe:
     name: johndoe
-    public_key_filename: ~/.ssh/fakeuser5/id_rsa.pub
+    public_key_filename: ~/.ssh/johndoe/id_rsa.pub
   janedoe:
     name: janedoe
-    public_key_filename: ~/.ssh/fakeuser5/id_rsa.pub
+    public_key_filename: ~/.ssh/janedoe/id_rsa.pub

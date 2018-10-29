@@ -1,5 +1,5 @@
 - hosts: webservers
-  remote_user: abennion
+  remote_user: ubuntu
   become: yes
   gather_facts: no
 

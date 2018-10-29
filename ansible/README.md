@@ -10,10 +10,17 @@ A simple Ansible playbook for managing users. The playbook:
 
 To run the playbook, you may need to:
 
-* Add the host to `/etc/ansible/hosts`
-* Add the host to `~/.ssh/config`
+* Add the hosts to `~/.ssh/config`
 
 ## Usage
+
+Add the target hosts to `/etc/ansible/hosts`:
+
+```ini
+[webservers]
+foo.example.com           ansible_connection=ssh          ansible_user=ubuntu
+bar.example.com           ansible_connection=ssh          ansible_user=ubuntu
+```
 
 If necessary generate new SSH keys. For example:
 
@@ -36,6 +43,13 @@ users:
   janedoe:
     name: janedoe
     public_key_filename: ~/.ssh/janedoe/id_rsa.pub
+```
+
+You may need to modify the remote user in [webservers.yml](webservers.yml):
+
+```bash
+- hosts: webservers
+  remote_user: ubuntu
 ```
 
 The execute the playbook:
