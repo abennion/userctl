@@ -11,6 +11,10 @@ Userctl is a sample user management CLI written in Python using
 A second solution is provided as an [Ansible](https://www.ansible.com/)
 playbook. The code and documentation are [here](ansible).
 
+Update: The code has been tested against Ubuntu and CentOS, but I plan to
+implement more subclasses of Users to support additional platforms closely
+based on Ansible's implementation.
+
 Both Fabric and Ansible use the
 [Paramiko](https://github.com/paramiko/paramiko) SSH library.
 
