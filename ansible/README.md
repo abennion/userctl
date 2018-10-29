@@ -1,13 +1,34 @@
 # userctl/ansible
 
-## Installation
+Overview
 
-* add host to /etc/ansible/hosts
-* ~/.ssh/config
+A simple Ansible playbook for managing users. The playbook:
+
+* Adds a user, including public key, on a remote host
+* Lists users on a remote host
+* Deletes the user from the remote host
+
+To run the playbook, you may need to:
+
+* Add the host to `/etc/ansible/hosts`
+* Add the host to `~/.ssh/config`
+
+Variables can be passed into Ansible in a variety of ways, but two default
+user accounts are defined under <ansible/roles/common/defaults/main.yaml>:
+
+```yaml
+users:
+  johndoe:
+    name: johndoe
+    public_key_filename: ~/.ssh/fakeuser5/id_rsa.pub
+  janedoe:
+    name: janedoe
+    public_key_filename: ~/.ssh/fakeuser5/id_rsa.pub
+```
 
 ## Usage
 
 ```bash
-cd ansible
+cd userctl/ansible
 ansible-playbook webservers.yml -v
 ```
