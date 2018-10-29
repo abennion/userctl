@@ -4,14 +4,17 @@ User managers implemented for different host environments.
 """
 
 
-def create_instance(*args, name='generic', **kwargs):
+def create_instance(*args, **kwargs):
     """
     Factory method that returns an instance derived from Users.
     """
-    classes = {
-        'generic': Users
-    }
-    runner_class = classes.get(name.lower(), None)
+    platform = kwargs.get('platform', None)
+    distribution = kwargs.get('distribution', None)
+    runner_class = None
+    if platform == "foo" and distribution == "bar":
+        raise NotImplementedError()
+    else:
+        runner_class = Users
     if runner_class:
         return runner_class(*args, **kwargs)
     raise NotImplementedError()
@@ -20,10 +23,10 @@ def create_instance(*args, name='generic', **kwargs):
 class Users(object):
     """
     User manager for a generic Linux host.
+
+    Ansible user module: https://github.com/ansible/ansible-modules-core/blob/devel/system/user.py.
     """
 
-    # platform = 'generic'
-    # distribution = None
     runner = None
 
     def __init__(self, *args, **kwargs):

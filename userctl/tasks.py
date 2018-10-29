@@ -28,11 +28,22 @@ def get_fabric_runner(ctx, host):
     return create_runner('fabric', **kwargs)
 
 
+def get_host_platform(host):
+    # TODO determine the host's platform
+    return "Linux"
+
+
+def get_host_distribution(host):
+    # TODO determine the host's distribution
+    return "Ubuntu"
+
+
 def get_user_manager(ctx, host, runner):
-    # TODO determine the host's platform and distribution
+    platform = get_host_platform(host)
+    distribution = get_host_distribution(host)
     kwargs = {
-        'platform': 'Linux',
-        'distribution': 'Ubuntu',
+        'platform': platform,
+        'distribution': distribution,
         'runner': runner,
     }
     return create_users(**kwargs)
