@@ -4,9 +4,9 @@
 
 A simple Ansible playbook for managing users. The playbook:
 
-* Adds a user, including public key, on a remote host
+* Adds a users on a remote host including public keys
 * Lists users on a remote host
-* Deletes the user from the remote host
+* Deletes users from the remote host
 
 To run the playbook, you may need to:
 
@@ -18,8 +18,8 @@ Add the target hosts to `/etc/ansible/hosts`:
 
 ```ini
 [webservers]
-foo.example.com           ansible_connection=ssh          ansible_user=ubuntu
-bar.example.com           ansible_connection=ssh          ansible_user=ubuntu
+foo.example.com   ansible_connection=ssh    ansible_user=ubuntu
+bar.example.com   ansible_connection=ssh    ansible_user=ubuntu
 ```
 
 If necessary generate new SSH keys. For example:
@@ -52,7 +52,7 @@ You may need to modify the remote user in [webservers.yml](webservers.yml):
   remote_user: ubuntu
 ```
 
-The execute the playbook:
+To execute the playbook:
 
 ```bash
 ansible-playbook webservers.yml -v
