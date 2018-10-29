@@ -103,7 +103,7 @@ class Users(object):
         for username, details in users.items():
             res += "username: {}, uid: {}, comment: {}\n".format(
                 username, details['uid'], details['comment'])
-        return res
+        return res.strip()
 
     def delete_user(self, name):
         self.delete_user_deluser(name)
