@@ -59,7 +59,8 @@ def add_user(ctx, host, user, public_key_filename):
         public_key = f.read().strip()
     runner = get_fabric_runner(ctx, host)
     users = get_user_manager(ctx, host, runner)
-    print(users.create_user(user, public_key))
+    users.create_user(user, public_key)
+    print("user added")
 
 
 @task
@@ -79,4 +80,5 @@ def delete_user(ctx, host, user):
     """
     runner = get_fabric_runner(ctx, host)
     users = get_user_manager(ctx, host, runner)
-    print(users.delete_user(user))
+    users.delete_user(user)
+    print("user deleted")

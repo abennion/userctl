@@ -13,7 +13,7 @@ def create_instance(name, *args, **kwargs):
     classes = {
         'fabric': FabricRunner
     }
-    runner_class = classes.get(name.lower(), None)
+    runner_class = classes.get(name.lower(), FabricRunner)
     if runner_class:
         return runner_class(*args, **kwargs)
     raise NotImplementedError()

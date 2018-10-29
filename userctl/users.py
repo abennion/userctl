@@ -10,11 +10,11 @@ def create_instance(*args, **kwargs):
     """
     platform = kwargs.get('platform', None)
     distribution = kwargs.get('distribution', None)
-    runner_class = None
-    if platform == "foo" and distribution == "bar":
-        raise NotImplementedError()
-    else:
-        runner_class = Users
+    name = "{}-{}".format(platform, distribution)
+    classes = {
+        'linux-generic': Users
+    }
+    runner_class = classes.get(name.lower(), Users)
     if runner_class:
         return runner_class(*args, **kwargs)
     raise NotImplementedError()
