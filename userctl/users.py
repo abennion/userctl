@@ -27,6 +27,14 @@ class Users(object):
     Ansible user module: https://github.com/ansible/ansible-modules-core/blob/devel/system/user.py.
     """
 
+    PASSWD_USERNAME = 0
+    PASSWD_PASSWORD = 1
+    PASSWD_UID = 2
+    PASSWD_GID = 3
+    PASSWD_COMMENT = 4
+    PASSWD_HOME = 5
+    PASSWD_SHELL = 6
+
     runner = None
 
     def __init__(self, *args, **kwargs):
@@ -49,8 +57,20 @@ class Users(object):
         return self.run_command(cmd)
 
     def list_users_passwd(self):
-        cmd = "cat /etc/passwd | grep '/home' | cut -d: -f1"
-        return self.runner.run_command(cmd)
+        # cmd = "cat /etc/passwd | grep '/home' | cut -d: -f1"
+        cmd = "getent passwd"
+        text = self.runner.run_command(cmd)
+        users = {}
+        for line in text.strip().split('\n'):
+            parts = line.split(':')
+            if '/home' in parts[self.PASSWD_HOME]:
+                # this doesn't really need to be a dict
+                users[parts[self.PASSWD_USERNAME]] = {
+                    'uid': parts[self.PASSWD_UID],
+                    'comment': parts[self.PASSWD_COMMENT],
+                    'home': parts[self.PASSWD_HOME]
+                }
+        return users
 
     def delete_user_deluser(self, name):
         cmd = "deluser --remove-home {}".format(name)
@@ -78,7 +98,12 @@ class Users(object):
             self.run_command(cmd)
 
     def list_users(self):
-        return self.list_users_passwd()
+        users = self.list_users_passwd()
+        res = ""
+        for username, details in users.items():
+            res += "username: {}, uid: {}, comment: {}\n".format(
+                username, details['uid'], details['comment'])
+        return res
 
     def delete_user(self, name):
         self.delete_user_deluser(name)
