@@ -1,6 +1,6 @@
 # userctl/ansible
 
-Overview
+## Overview
 
 A simple Ansible playbook for managing users. The playbook:
 
@@ -14,7 +14,8 @@ To run the playbook, you may need to:
 * Add the host to `~/.ssh/config`
 
 Variables can be passed into Ansible in a variety of ways, but two default
-user accounts are defined under <ansible/roles/common/defaults/main.yaml>:
+user accounts are defined under
+[ansible/roles/common/defaults/main.yaml](ansible/roles/common/defaults/main.yaml):
 
 ```yaml
 users:
