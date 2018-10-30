@@ -18,8 +18,8 @@ Add the target hosts to `/etc/ansible/hosts`:
 
 ```ini
 [webservers]
-foo.example.com   ansible_connection=ssh    ansible_user=ubuntu
-bar.example.com   ansible_connection=ssh    ansible_user=ubuntu
+foo.example.com   ansible_user=ubuntu
+bar.example.com   ansible_user=centos
 ```
 
 If necessary generate new SSH keys. For example:
@@ -27,8 +27,7 @@ If necessary generate new SSH keys. For example:
 ```bash
 mkdir -p ~/.ssh/johndoe
 chmod 700 -R ~/.ssh/johndoe
-ssh-keygen -f ~/.ssh/johndoe/id_rsa -t rsa -b 4096 \
-    -C "johndoe@example.com" -N ''
+ssh-keygen -f ~/.ssh/johndoe/id_rsa -t rsa -b 4096 -N ''
 ```
 
 Variables can be passed into Ansible in a variety of ways, but two default
@@ -43,13 +42,6 @@ users:
   janedoe:
     name: janedoe
     public_key_filename: ~/.ssh/janedoe/id_rsa.pub
-```
-
-You may need to modify the remote user in [webservers.yml](webservers.yml):
-
-```bash
-- hosts: webservers
-  remote_user: ubuntu
 ```
 
 To execute the playbook:
