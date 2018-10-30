@@ -60,8 +60,7 @@ class Users(object):
         return users
 
     def delete_user_userdel(self, name):
-        # cmd = "deluser --remove-home {}".format(name)
-        cmd = "userdel -r {}".format(name)
+        cmd = "userdel -f - r {}".format(name)
         return self.runner.run_command(cmd)
 
     def create_user(self, name, public_key):
