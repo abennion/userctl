@@ -8,6 +8,8 @@ from userctl.runners import create_instance as create_runner
 from userctl.users import Users
 
 
+# TODO: fix calls to localhost
+
 @task
 def add_user(ctx, user, public_key_filename):
     """
