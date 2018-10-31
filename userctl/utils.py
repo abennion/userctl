@@ -1,29 +1,13 @@
 # pylint: disable=C0111,W0613,C0103
 from __future__ import print_function
 from textwrap import dedent
-from .runners import create_instance as create_runner
 
 
-def get_fabric_runner(ctx, host):
-    # TODO: this could be better since we're using fabric.config already
-    kwargs = {
-        'host': host,
-        'user': ctx.user,
-        'port': ctx.port,
-        'config': ctx.config,
-        'gateway': ctx.gateway,
-        'forward_agent': ctx.forward_agent,
-        'connect_timeout': ctx.timeouts,
-        'connect_kwargs': ctx.connect_kwargs,
-    }
-    return create_runner('fabric', **kwargs)
-
-
-def get_platform(runner):
+def get_platform(*args, **kwargs):
     """
     Returns the platform of the remote host.
     """
-    # TODO move these to a helper module
+    runner = kwargs.get('runner', None)
     cmd = dedent("""\
         python - <<DOC
         from __future__ import print_function
@@ -31,14 +15,14 @@ def get_platform(runner):
         print(platform.system())
         DOC
         """).strip()
-    return runner.run_command(cmd).strip()
+    return runner.run_command(cmd, *args, **kwargs).strip()
 
 
-def get_distribution(runner):
+def get_distribution(*args, **kwargs):
     """
     Returns the distribution of the remote host.
 
-    Code from Ansible.
+    Sourcee: https://github.com/ansible/ansible
     """
     cmd = dedent("""\
         python - <<DOC
@@ -56,21 +40,21 @@ def get_distribution(runner):
                     else:
                         distribution = 'OtherLinux'
             except:
-                # FIXME: MethodMissing, I assume?
                 distribution = platform.dist()[0].capitalize()
         else:
             distribution = None
         print(distribution)
         DOC
         """).strip()
-    return runner.run_command(cmd).strip()
+    runner = kwargs.get('runner', None)
+    return runner.run_command(cmd, *args, **kwargs).strip()
 
 
-def get_distribution_version(runner):
+def get_distribution_version(*args, **kwargs):
     """
     Returns the distribution version.
 
-    Code from Ansible.
+    Source: https://github.com/ansible/ansible
     """
     cmd = dedent("""\
         python - <<DOC
@@ -83,21 +67,21 @@ def get_distribution_version(runner):
                 if not distribution_version and os.path.isfile('/etc/system-release'):
                     distribution_version = platform.linux_distribution(supported_dists=['system'])[1]
             except:
-                # FIXME: MethodMissing, I assume?
                 distribution_version = platform.dist()[1]
         else:
             distribution_version = None
         print(distribution_version)
         DOC
         """).strip()
-    return runner.run_command(cmd).strip()
+    runner = kwargs.get('runner', None)
+    return runner.run_command(cmd, *args, **kwargs).strip()
 
 
 def get_all_subclasses(cls):
     """
-    Returns all subclasses of a given class
+    Returns all subclasses of a given class.
 
-    Code from ansible.
+    Source: https://github.com/ansible/ansible
     """
     # Retrieve direct subclasses
     subclasses = cls.__subclasses__()
@@ -116,17 +100,12 @@ def get_all_subclasses(cls):
 
 def load_platform_subclass(cls, *args, **kwargs):
     """
-    Returnsa a platform specific subclass.
+    Returns a platform specific subclass.
 
-    Code based on Ansible.
+    Source: https://github.com/ansible/ansible
     """
-    runner = kwargs.get('runner', None)
-
-    this_platform = None
-    distribution = None
-    if runner is not None:
-        this_platform = get_platform(runner)
-        distribution = get_distribution(runner)
+    this_platform = get_platform(**kwargs)
+    distribution = get_distribution(**kwargs)
     print("platform: {}, distribution: {}".format(
         this_platform, distribution))
     subclass = None
