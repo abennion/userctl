@@ -7,7 +7,6 @@ def get_platform(*args, **kwargs):
     """
     Returns the platform of the remote host.
     """
-    runner = kwargs.get('runner', None)
     cmd = dedent("""\
         python - <<DOC
         from __future__ import print_function
@@ -15,6 +14,7 @@ def get_platform(*args, **kwargs):
         print(platform.system())
         DOC
         """).strip()
+    runner = kwargs.get('runner', None)
     return runner.run_command(cmd, *args, **kwargs).strip()
 
 
