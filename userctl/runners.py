@@ -1,14 +1,12 @@
 # pylint: disable=W0613,C0111
 """
-Runners for executing local and remote commands.
+Runners for executing shell commands.
 """
-
-from fabric import Connection
 
 
 def create_instance(name, *args, **kwargs):
     """
-    Returns a runner instance by the specified name.
+    Runner factory method.
     """
     classes = {
         'fabric': FabricRunner
@@ -20,14 +18,13 @@ def create_instance(name, *args, **kwargs):
 
 
 class RunnerBase(object):
-
     def __init__(self, *args, **kwargs):
         self.post_initialize(*args, **kwargs)
 
     def post_initialize(self, *args, **kwargs):
         pass
 
-    def run_command(self, cmd):
+    def run_command(self, cmd, *args, **kwargs):
         raise NotImplementedError()
 
 
@@ -35,15 +32,11 @@ class FabricRunner(RunnerBase):
     """
     Command runner implemented using Fabric.
     """
-
-    host = None
-    config = None
+    connection = None
 
     def post_initialize(self, *args, **kwargs):
-        self.host = kwargs.get('host', None)
-        self.config = kwargs.get('config', None)
+        self.connection = kwargs.get('connection', None)
 
-    def run_command(self, cmd):
-        with Connection(host=self.host, config=self.config) as conn:
-            result = conn.sudo(cmd, hide=True)
-            return result.stdout.strip()
+    def run_command(self, cmd, *args, **kwargs):
+        fabric_kwargs = kwargs.get('fabric_kwargs', {})
+        return self.connection.sudo(cmd, **fabric_kwargs).stdout

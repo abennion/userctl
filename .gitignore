@@ -106,3 +106,5 @@ venv.bak/
 .vscode/
 tmp/
 
+# ignore our debug entry
+debug.py
