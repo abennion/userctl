@@ -73,7 +73,7 @@ class Users(object):
 
     def delete_user_userdel(self, name, **kwargs):
         """
-        Deletes a user via useradd.
+        Deletes a user via userdel.
         """
         cmd = "userdel -f -r {}".format(name)
         return self.run_command(cmd, **kwargs)
@@ -142,7 +142,6 @@ class Users(object):
         self.make_sshdir(name, **kwargs)
         self.make_authorized_keys(name, **kwargs)
         self.set_authorized_key(name, public_key, **kwargs)
-
 
     def list_users(self, **kwargs):
         """
