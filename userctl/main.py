@@ -1,4 +1,5 @@
 # pylint: disable=C0103,C0111
+import os
 from fabric.config import Config
 from fabric.main import Fab
 from .executor import FabExecutor
@@ -10,7 +11,8 @@ class UserCtl(Fab):
         # unless set by the user, update the search root to within our
         # package module
         if self.args['search-root'].value is None:
-            self.args['search-root'].value = "userctl"
+            path = os.path.realpath(__file__)
+            self.args['search-root'].value = path
         super(UserCtl, self).load_collection()
 
 
