@@ -1,10 +1,10 @@
 # pylint: disable=C0103,C0111
 from __future__ import print_function
 import os
-from . import __version__ as version
-from .executor import FabExecutor
 from fabric.main import Fab
 from fabric.config import Config
+from .executor import FabExecutor
+from . import __version__ as version
 
 
 class UserCtl(Fab):
