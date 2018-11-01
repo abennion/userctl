@@ -43,3 +43,10 @@ def delete_user(ctx, user):
     users = Users(runner=runner)
     users.delete_user(user, **{'fabric_kwargs': {'hide': True}})
     print("user deleted")
+
+
+@task
+def local_test(ctx):
+    runner = create_runner('fabric', connection=ctx)
+    runner.run_command("hostname", **{'hide': True})
+    print("done")

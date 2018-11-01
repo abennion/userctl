@@ -2,6 +2,8 @@
 """
 Runners for executing shell commands.
 """
+from socket import gethostbyname
+from ipaddress import IPv4Address
 
 
 def create_instance(name, *args, **kwargs):
@@ -36,6 +38,13 @@ class FabricRunner(RunnerBase):
 
     def post_initialize(self, *args, **kwargs):
         self.connection = kwargs.get('connection', None)
+
+    # TODO we could check loopback, but probably better to pass a flag
+
+    # from socket import gethostbyname
+    # ipaddr = gethostbyname("localhost")
+    # addr = ipaddress.IPv4Address(ipaddr)
+    # addr.is_loopback
 
     def run_command(self, cmd, *args, **kwargs):
         fabric_kwargs = kwargs.get('fabric_kwargs', {})
