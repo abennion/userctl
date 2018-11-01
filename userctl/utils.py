@@ -22,7 +22,7 @@ def get_distribution(*args, **kwargs):
     """
     Returns the distribution of the remote host.
 
-    Sourcee: https://github.com/ansible/ansible
+    Source: https://github.com/ansible/ansible
     """
     cmd = dedent("""\
         python - <<DOC

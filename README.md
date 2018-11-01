@@ -41,6 +41,7 @@ pip install -e git+https://github.com/abennion/userctl#egg=userctl
 
 ```bash
 # show the core arguments
+# NOTE: not all core Fab arguments are supported at this time
 userctl --help
 
 # list users
