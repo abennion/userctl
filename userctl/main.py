@@ -12,8 +12,7 @@ class UserCtl(Fab):
         # unless set by the user, update the search root to within our
         # package module
         if self.args['search-root'].value is None:
-            # path = os.path.realpath(__file__)
-            path = os.path.abspath(__file__)
+            path = os.path.dirname(os.path.abspath(__file__))
             print("path: {}".format(path))
             self.args['search-root'].value = path
         super(UserCtl, self).load_collection()
